@@ -13,6 +13,7 @@
 #include "task.h"
 
 #include "stm32l4xx_hal.h"
+#include "hal_i2c.h"
 
 /**
  * The server task tries not to hold two complete packets simultaneously, even though it handles a request and reply packet.
@@ -35,6 +36,10 @@ void vI2CMasterTask(void *pvParameters) {
 						packet->data + 2, packet->length - 2) != HAL_OK)
 					vTaskDelay(pdMS_TO_TICKS(1));
 				xTaskNotifyWait(0L, ULONG_MAX, &ulNotified, portMAX_DELAY);
+				switch (ulNotified) {
+				case HAL_I2C_MASTER_TX_CPLT_NOTIFIED:
+					break;
+				}
 				size_t length = packet->data[1];
 				csp_buffer_free(packet);
 				packet = csp_buffer_get(length);
