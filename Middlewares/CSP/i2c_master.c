@@ -38,10 +38,12 @@ void vI2CMasterTask(void *pvParameters) {
 				size_t length = packet->data[1];
 				csp_buffer_free(packet);
 				packet = csp_buffer_get(length);
-				while (HAL_I2C_Master_Receive_IT(hI2C, uDevAddress,
-						packet->data, length) != HAL_OK)
-					;
-				xTaskNotifyWait(0L, ULONG_MAX, &ulNotified, portMAX_DELAY);
+				if (length) {
+					while (HAL_I2C_Master_Receive_IT(hI2C, uDevAddress,
+							packet->data, length) != HAL_OK)
+						;
+					xTaskNotifyWait(0L, ULONG_MAX, &ulNotified, portMAX_DELAY);
+				}
 				csp_send(conn, packet);
 			} else {
 				csp_buffer_free(packet);
