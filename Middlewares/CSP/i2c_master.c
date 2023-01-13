@@ -41,7 +41,7 @@ void vI2CMasterTask(void *pvParameters) {
 				if (length) {
 					while (HAL_I2C_Master_Receive_IT(hI2C, uDevAddress,
 							packet->data, length) != HAL_OK)
-						;
+						vTaskDelay(pdMS_TO_TICKS(1));
 					xTaskNotifyWait(0L, ULONG_MAX, &ulNotified, portMAX_DELAY);
 				}
 				csp_send(conn, packet);
