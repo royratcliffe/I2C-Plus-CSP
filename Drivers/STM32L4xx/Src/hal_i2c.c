@@ -6,6 +6,7 @@
  */
 
 #include "stm32l4xx.h"
+#include "hal_i2c.h"
 
 #include "FreeRTOS.h"
 #include "task.h"
@@ -25,5 +26,5 @@ void HAL_I2C_MasterTxCpltCallback(I2C_HandleTypeDef *hi2c) {
 	else
 		xTaskToNotify = NULL;
 	if (xTaskToNotify)
-		xTaskNotify(xTaskToNotify, 1UL << 0U, eSetBits);
+		xTaskNotify(xTaskToNotify, HAL_I2C_MASTER_TX_CPLT_NOTIFIED, eSetBits);
 }
