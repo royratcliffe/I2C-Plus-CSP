@@ -14,7 +14,7 @@
 
 #include "stm32l4xx_hal.h"
 
-/*!
+/**
  * The server task tries not to hold two complete packets simultaneously, even though it handles a request and reply packet.
  */
 void vI2CMasterTask(void *pvParameters) {
